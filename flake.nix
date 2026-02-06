@@ -239,16 +239,17 @@
               "d ${cfg.dataDir} 0755 ${cfg.user} ${cfg.group} -"
             ];
 
-            # udev rules for RTL-SDR
+            # udev rules for RTL-SDR - sets permissions and tags for systemd device units
             services.udev.extraRules = ''
-              SUBSYSTEM=="usb", ATTRS{idVendor}=="0bda", ATTRS{idProduct}=="2838", GROUP="plugdev", MODE="0666"
-              SUBSYSTEM=="usb", ATTRS{idVendor}=="0bda", ATTRS{idProduct}=="2832", GROUP="plugdev", MODE="0666"
+              SUBSYSTEM=="usb", ATTRS{idVendor}=="0bda", ATTRS{idProduct}=="2838", GROUP="plugdev", MODE="0660", TAG+="systemd"
+              SUBSYSTEM=="usb", ATTRS{idVendor}=="0bda", ATTRS{idProduct}=="2832", GROUP="plugdev", MODE="0660", TAG+="systemd"
             '';
 
             # The systemd service
             systemd.services.elster = {
               description = "Elster Smart Meter Receiver";
-              after = [ "network.target" ];
+              after = [ "network.target" "systemd-udev-settle.service" ];
+              wants = [ "systemd-udev-settle.service" ];
               wantedBy = [ "multi-user.target" ];
 
               environment = {
