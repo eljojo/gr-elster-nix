@@ -64,10 +64,11 @@
             '';
           };
 
-          # Find the correct soapy modules path (varies by system)
-          soapyModulesPath = if pkgs.stdenv.isDarwin
-            then "${pkgs.soapyrtlsdr}/lib/SoapySDR/modules0.8-3"
-            else "${pkgs.soapyrtlsdr}/lib/SoapySDR/modules0.8";
+          # Find the correct soapy modules path (varies by version)
+          soapyModulesPath = let
+            dirs = builtins.attrNames (builtins.readDir "${pkgs.soapyrtlsdr}/lib/SoapySDR");
+            moduleDirs = builtins.filter (n: builtins.match "modules.*" n != null) dirs;
+          in "${pkgs.soapyrtlsdr}/lib/SoapySDR/${builtins.head moduleDirs}";
 
           # Generate the nogui Python script from our custom GRC (uses Soapy, not osmosdr)
           elster-nogui-py = pkgs.runCommand "elster-nogui-py" {
