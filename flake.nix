@@ -233,6 +233,15 @@
               extraGroups = [ "plugdev" ];  # For USB access to RTL-SDR
             };
             users.groups.${cfg.group} = {};
+            users.groups.plugdev = {};
+
+            # Prevent kernel DVB drivers from claiming the RTL-SDR
+            boot.blacklistedKernelModules = [
+              "dvb_usb_rtl28xxu"
+              "dvb_usb_v2"
+              "rtl2832"
+              "dvb_core"
+            ];
 
             # Ensure data directory exists
             systemd.tmpfiles.rules = [
