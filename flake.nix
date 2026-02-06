@@ -253,7 +253,10 @@
               environment = {
                 ELSTER_DATA_DIR = cfg.dataDir;
                 ELSTER_DEV_ARGS = lib.optionalString (cfg.deviceSerial != "") "serial=${cfg.deviceSerial}";
-                SOAPY_SDR_PLUGIN_PATH = "${pkgs.soapyrtlsdr}/lib/SoapySDR/modules0.8";
+                SOAPY_SDR_PLUGIN_PATH = let
+                  dirs = builtins.attrNames (builtins.readDir "${pkgs.soapyrtlsdr}/lib/SoapySDR");
+                  moduleDirs = builtins.filter (n: builtins.match "modules.*" n != null) dirs;
+                in "${pkgs.soapyrtlsdr}/lib/SoapySDR/${builtins.head moduleDirs}";
                 PYTHONPATH = lib.concatStringsSep ":" [
                   "${packages.gr-elster}/lib/${pkgs.python3.libPrefix}/site-packages"
                   "${pkgs.gnuradio}/lib/${pkgs.python3.libPrefix}/site-packages"
