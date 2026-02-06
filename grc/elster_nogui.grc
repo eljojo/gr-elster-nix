@@ -1,0 +1,309 @@
+options:
+  parameters:
+    author: ''
+    catch_exceptions: 'True'
+    category: Custom
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: 'Elster receiver - headless CLI version'
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: no_gui
+    hier_block_src_path: '.:'
+    id: elster_nogui
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: run
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: 'Elster Receiver (CLI)'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [10, 10]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: center_freq
+  id: variable
+  parameters:
+    comment: ''
+    value: '910600000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 268]
+    rotation: 0
+    state: enabled
+
+- name: channel_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: '400000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 140]
+    rotation: 0
+    state: enabled
+
+- name: rx_gain
+  id: variable
+  parameters:
+    comment: ''
+    value: '30'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 332]
+    rotation: 0
+    state: enabled
+
+- name: samp_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: '2400000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 204]
+    rotation: 0
+    state: enabled
+
+- name: dev_args
+  id: variable
+  parameters:
+    comment: ''
+    value: os.environ.get("ELSTER_DEV_ARGS", "")
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 396]
+    rotation: 0
+    state: enabled
+
+- name: import_0
+  id: import
+  parameters:
+    alias: ''
+    comment: ''
+    imports: import math, os
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 84]
+    rotation: 0
+    state: enabled
+
+- name: soapy_rtlsdr_source_0
+  id: soapy_rtlsdr_source
+  parameters:
+    affinity: ''
+    agc: 'False'
+    alias: ''
+    bias: 'False'
+    bufflen: '16384'
+    center_freq: center_freq
+    comment: ''
+    dev_args: dev_args
+    freq_correction: '0'
+    gain: rx_gain
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: samp_rate
+    type: fc32
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [200, 200]
+    rotation: 0
+    state: enabled
+
+- name: blocks_rotator_cc_0
+  id: blocks_rotator_cc
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    phase_inc: 2 * math.pi * (channel_rate / 2) / samp_rate
+    tag_inc_update: 'False'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [440, 276]
+    rotation: 0
+    state: enabled
+
+- name: pfb_channelizer_ccf_0
+  id: pfb_channelizer_ccf
+  parameters:
+    affinity: ''
+    alias: ''
+    atten: '100'
+    bus_structure_source: '[[0,],]'
+    ch_map: '[]'
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    nchans: samp_rate // channel_rate
+    osr: '1.0'
+    samp_delay: '0'
+    taps: firdes.low_pass(1, samp_rate, 175000, 50000, window.WIN_HAMMING, 6.76)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [680, 320]
+    rotation: 0
+    state: enabled
+
+- name: elster_channel_rx_0
+  id: elster_channel_rx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [912, 320]
+    rotation: 0
+    state: enabled
+
+- name: elster_channel_rx_0_0
+  id: elster_channel_rx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [912, 352]
+    rotation: 0
+    state: enabled
+
+- name: elster_channel_rx_0_1
+  id: elster_channel_rx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [912, 384]
+    rotation: 0
+    state: enabled
+
+- name: elster_channel_rx_0_2
+  id: elster_channel_rx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [912, 416]
+    rotation: 0
+    state: enabled
+
+- name: elster_channel_rx_0_3
+  id: elster_channel_rx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [912, 448]
+    rotation: 0
+    state: enabled
+
+- name: elster_channel_rx_0_4
+  id: elster_channel_rx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [912, 480]
+    rotation: 0
+    state: enabled
+
+- name: elster_packetize_0
+  id: elster_packetize
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    num_inputs: '6'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1056, 320]
+    rotation: 0
+    state: enabled
+
+connections:
+- [soapy_rtlsdr_source_0, '0', blocks_rotator_cc_0, '0']
+- [blocks_rotator_cc_0, '0', pfb_channelizer_ccf_0, '0']
+- [pfb_channelizer_ccf_0, '0', elster_channel_rx_0, '0']
+- [pfb_channelizer_ccf_0, '1', elster_channel_rx_0_0, '0']
+- [pfb_channelizer_ccf_0, '2', elster_channel_rx_0_1, '0']
+- [pfb_channelizer_ccf_0, '3', elster_channel_rx_0_2, '0']
+- [pfb_channelizer_ccf_0, '4', elster_channel_rx_0_3, '0']
+- [pfb_channelizer_ccf_0, '5', elster_channel_rx_0_4, '0']
+- [elster_channel_rx_0, '0', elster_packetize_0, '0']
+- [elster_channel_rx_0_0, '0', elster_packetize_0, '1']
+- [elster_channel_rx_0_1, '0', elster_packetize_0, '2']
+- [elster_channel_rx_0_2, '0', elster_packetize_0, '3']
+- [elster_channel_rx_0_3, '0', elster_packetize_0, '4']
+- [elster_channel_rx_0_4, '0', elster_packetize_0, '5']
+
+metadata:
+  file_format: 1
+  grc_version: 3.10.12.0
